@@ -91,6 +91,22 @@ src/
 
 The application is started by loading `index.html` in a web browser. The HTML file loads the required Three.js libraries and then imports the main JavaScript module, which initializes the entire application.
 
+## Deployment
+
+This project is deployed using GitHub Pages. The live version is available at:
+**http://homam.github.io/orrery/src**
+
+### Local Development
+
+To run the project locally:
+1. Clone the repository
+2. Open `src/index.html` in a web browser
+3. Or serve the files using a local web server (recommended for development)
+
+### GitHub Pages Setup
+
+The project uses GitHub Actions to automatically deploy to GitHub Pages. The workflow is configured in `.github/workflows/deploy.yml` and will deploy the entire repository to GitHub Pages, making the application available at the URL above.
+
 ## Dependencies
 
 - Three.js (loaded via CDN)
