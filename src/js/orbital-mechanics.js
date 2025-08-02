@@ -20,6 +20,8 @@ export const OrbitalMechanics = {
         const x_ecl = (cos_w * cos_N - sin_w * sin_N * cos_i) * x_orb + (-sin_w * cos_N - cos_w * sin_N * cos_i) * y_orb;
         const y_ecl = (cos_w * sin_N + sin_w * cos_N * cos_i) * x_orb + (-sin_w * sin_N + cos_w * cos_N * cos_i) * y_orb;
         const z_ecl = (sin_w * sin_i) * x_orb + (cos_w * sin_i) * y_orb;
+        // Return in ecliptic coordinate system: (x_ecl, z_ecl, y_ecl)
+        // This keeps planets on the ecliptic plane
         return new THREE.Vector3(x_ecl, z_ecl, y_ecl);
     }
 }; 

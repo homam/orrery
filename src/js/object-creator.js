@@ -80,9 +80,24 @@ export class ObjectCreator {
                 const ra = OrbitalMechanics.toRadians(star.geometry.coordinates[0]);
                 const dec = OrbitalMechanics.toRadians(star.geometry.coordinates[1]);
 
-                const x = sphereRadius * Math.cos(dec) * Math.cos(ra);
-                const y = sphereRadius * Math.sin(dec);
-                const z = sphereRadius * Math.cos(dec) * Math.sin(ra);
+                // Convert RA/Dec to 3D coordinates (equatorial system)
+                // RA is longitude (0-360°), Dec is latitude (-90° to +90°)
+                // Standard astronomical coordinate system: X points to vernal equinox, Z points to north celestial pole
+                let x = sphereRadius * Math.cos(dec) * Math.cos(ra);
+                let y = sphereRadius * Math.cos(dec) * Math.sin(ra);
+                let z = sphereRadius * Math.sin(dec);
+                
+                // Transform from equatorial to ecliptic coordinates
+                // Ecliptic is tilted by ~23.5° relative to celestial equator
+                const eclipticObliquity = OrbitalMechanics.toRadians(23.439);
+                const xEcl = x;
+                const yEcl = y * Math.cos(eclipticObliquity) - z * Math.sin(eclipticObliquity);
+                const zEcl = y * Math.sin(eclipticObliquity) + z * Math.cos(eclipticObliquity);
+                
+                // Flip coordinates to match Earth's perspective (inside-out view)
+                x = -xEcl;
+                y = zEcl; // Match planet coordinate system
+                z = yEcl;
                 
                 starVertices.push(x, y, z);
                 starSizes.push((6.5 - mag) * 10.0);
@@ -121,7 +136,7 @@ export class ObjectCreator {
             const constellationGroup = new THREE.Group();
             const lineMaterial = new THREE.LineBasicMaterial({ 
                 color: 0x6688ff,
-                opacity: 0.9, 
+                opacity: 0.5, 
                 transparent: true,
                 depthTest: true,
                 depthWrite: false,
@@ -142,9 +157,21 @@ export class ObjectCreator {
                                 const ra = OrbitalMechanics.toRadians(coord[0]);
                                 const dec = OrbitalMechanics.toRadians(coord[1]);
                                 
-                                const x = sphereRadius * Math.cos(dec) * Math.cos(ra);
-                                const y = sphereRadius * Math.sin(dec);
-                                const z = sphereRadius * Math.cos(dec) * Math.sin(ra);
+                                // Convert to equatorial coordinates first
+                                let x = sphereRadius * Math.cos(dec) * Math.cos(ra);
+                                let y = sphereRadius * Math.cos(dec) * Math.sin(ra);
+                                let z = sphereRadius * Math.sin(dec);
+                                
+                                // Transform from equatorial to ecliptic coordinates
+                                const eclipticObliquity = OrbitalMechanics.toRadians(23.439);
+                                const xEcl = x;
+                                const yEcl = y * Math.cos(eclipticObliquity) - z * Math.sin(eclipticObliquity);
+                                const zEcl = y * Math.sin(eclipticObliquity) + z * Math.cos(eclipticObliquity);
+                                
+                                // Flip coordinates to match Earth's perspective (inside-out view)
+                                x = -xEcl;
+                                y = zEcl; // Match planet coordinate system
+                                z = yEcl;
                                 
                                 points.push(new THREE.Vector3(x, y, z));
                             });
