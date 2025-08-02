@@ -8,6 +8,8 @@
 <body>
     <h1>URL Parameters Test</h1>
     <p>Test the URL parameter functionality:</p>
+    
+    <h2>Time Slider Tests:</h2>
     <ul>
         <li><a href="src/index.html">Default (no params)</a></li>
         <li><a href="src/index.html?days=0">Jan 1, 1960</a></li>
@@ -16,11 +18,37 @@
         <li><a href="src/index.html?days=18262">Jan 1, 2020</a></li>
     </ul>
     
+    <h2>Camera Position Tests:</h2>
+    <ul>
+        <li><a href="src/index.html?cam_dist=130&cam_az=0&cam_el=60">Default view</a></li>
+        <li><a href="src/index.html?cam_dist=200&cam_az=45&cam_el=30">Side view</a></li>
+        <li><a href="src/index.html?cam_dist=100&cam_az=180&cam_el=0">Behind view</a></li>
+        <li><a href="src/index.html?cam_dist=300&cam_az=90&cam_el=45">Top-down view</a></li>
+        <li><a href="src/index.html?cam_dist=80&cam_az=270&cam_el=-30">Close-up view</a></li>
+    </ul>
+    
+    <h2>Combined Tests (Time + Camera):</h2>
+    <ul>
+        <li><a href="src/index.html?days=14610&cam_dist=150&cam_az=90&cam_el=20">Jan 1, 2000 - Side view</a></li>
+        <li><a href="src/index.html?days=18262&cam_dist=250&cam_az=180&cam_el=60">Jan 1, 2020 - Behind view</a></li>
+        <li><a href="src/index.html?days=0&cam_dist=100&cam_az=0&cam_el=0">Jan 1, 1960 - Front view</a></li>
+    </ul>
+    
     <p>Expected behavior:</p>
     <ul>
         <li>Each link should load the orrery with the slider positioned at the correct date</li>
+        <li>Camera should be positioned according to the spherical coordinates (distance, azimuth, elevation)</li>
         <li>Moving the slider should update the URL parameter</li>
+        <li>Moving the camera should update the URL parameters</li>
         <li>URL changes should not pollute browser history</li>
+        <li>Combined parameters should work together</li>
+    </ul>
+    
+    <h3>Camera Parameters Explained:</h3>
+    <ul>
+        <li><strong>cam_dist</strong>: Distance from center (10-1000)</li>
+        <li><strong>cam_az</strong>: Azimuth angle in degrees (0-360)</li>
+        <li><strong>cam_el</strong>: Elevation angle in degrees (-90 to 90)</li>
     </ul>
 </body>
 </html> 

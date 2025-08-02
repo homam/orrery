@@ -1,4 +1,6 @@
 // === SCENE MANAGEMENT ===
+import { URLParams } from './url-params.js';
+
 export class SceneManager {
     constructor() {
         this.scene = null;
@@ -10,14 +12,17 @@ export class SceneManager {
         this.mouse = new THREE.Vector2();
         this.selectedPlanetName = '';
         this.celestialObjects = [];
+        this.lastCameraUpdate = 0;
+        this.cameraUpdateThrottle = 100; // Update URL every 100ms
     }
 
     init() {
         this.scene = new THREE.Scene();
         this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 4000);
-        this.camera.position.set(0, 60, 130);
-        this.camera.lookAt(this.scene.position);
-
+        
+        // Initialize camera position from URL parameters
+        this.setupCameraFromURL();
+        
         this.renderer = new THREE.WebGLRenderer({ antialias: true });
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         this.renderer.setPixelRatio(window.devicePixelRatio);
@@ -26,8 +31,50 @@ export class SceneManager {
         this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
         this.controls.enableDamping = true;
         this.controls.dampingFactor = 0.05;
+        
+        // Set up camera position URL synchronization
+        this.setupCameraURLSync();
 
         this.setupLighting();
+    }
+
+    setupCameraFromURL() {
+        const cameraPos = URLParams.getCameraPosition();
+        const cartesian = URLParams.sphericalToCartesian(
+            cameraPos.distance,
+            cameraPos.azimuth,
+            cameraPos.elevation
+        );
+        
+        this.camera.position.set(cartesian.x, cartesian.y, cartesian.z);
+        this.camera.lookAt(this.scene.position);
+    }
+
+    setupCameraURLSync() {
+        // Update URL when camera changes
+        this.controls.addEventListener('change', () => {
+            const now = Date.now();
+            if (now - this.lastCameraUpdate > this.cameraUpdateThrottle) {
+                const spherical = URLParams.cartesianToSpherical(
+                    this.camera.position.x,
+                    this.camera.position.y,
+                    this.camera.position.z
+                );
+                
+                URLParams.updateCameraPosition(
+                    spherical.distance,
+                    spherical.azimuth,
+                    spherical.elevation
+                );
+                
+                this.lastCameraUpdate = now;
+            }
+        });
+
+        // Handle URL changes for camera position
+        window.addEventListener('popstate', () => {
+            this.setupCameraFromURL();
+        });
     }
 
     setupLighting() {
