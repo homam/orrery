@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Params Test</title>
+</head>
+<body>
+    <h1>URL Parameters Test</h1>
+    <p>Test the URL parameter functionality:</p>
+    <ul>
+        <li><a href="src/index.html">Default (no params)</a></li>
+        <li><a href="src/index.html?days=0">Jan 1, 1960</a></li>
+        <li><a href="src/index.html?days=14610">Jan 1, 2000</a></li>
+        <li><a href="src/index.html?days=25932">Dec 31, 2030</a></li>
+        <li><a href="src/index.html?days=18262">Jan 1, 2020</a></li>
+    </ul>
+    
+    <p>Expected behavior:</p>
+    <ul>
+        <li>Each link should load the orrery with the slider positioned at the correct date</li>
+        <li>Moving the slider should update the URL parameter</li>
+        <li>URL changes should not pollute browser history</li>
+    </ul>
+</body>
+</html> 

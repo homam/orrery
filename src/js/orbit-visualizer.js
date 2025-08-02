@@ -51,7 +51,7 @@ export class OrbitVisualizer {
         const orbitGeometry = new THREE.BufferGeometry().setFromPoints(points);
         const orbitMaterial = new THREE.LineBasicMaterial({ 
             color: 0xffffff, 
-            opacity: 0.2, 
+            opacity: 0.25, 
             transparent: true,
             depthTest: true,
             depthWrite: false
